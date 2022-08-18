@@ -5,7 +5,9 @@ import (
 	"github.com/fatih/color"
 	"net/http"
 	"project/cache"
+	"project/checker"
 	"project/helper"
+	"time"
 )
 
 var list = cache.WebsiteList
@@ -43,4 +45,27 @@ func getListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func checkStatusHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	optionalQuery := r.Form.Get("name")
+	if optionalQuery == "" {
+		for {
+			color.Cyan(fmt.Sprintf("\n\n" + time.Now().String() + "\n\n"))
+			helper.GetStatusHelper(list)
+			time.Sleep(15 * time.Second)
+		}
+	} else {
+		color.Magenta(fmt.Sprintf("\nObtained Optional Query parameter is " + optionalQuery))
+		_, ok := list[optionalQuery]
+		if ok {
+			checkerObj := checker.StatusChecker{}
+			res, _ := checkerObj.CheckStatus(optionalQuery)
+			if res {
+				color.Green(fmt.Sprintf("The Website " + optionalQuery + " is UP"))
+			} else {
+				color.Red(fmt.Sprintf("The Website " + optionalQuery + " is DOWN"))
+			}
+		} else {
+			color.Yellow("Sorry!... No such Website Provided... :(")
+		}
+	}
 }
