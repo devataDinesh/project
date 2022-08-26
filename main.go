@@ -1,5 +1,11 @@
 package main
 
+//Problem Statement:
+
+//We are going to build an application that is meant to be a sort of status checker for some
+//common websites that exist online. The application continuously polls the status of these websites
+//and exposes APIs to retrieve the information.
+
 import (
 	"fmt"
 	"github.com/fatih/color"
@@ -34,7 +40,6 @@ func getListHandler(w http.ResponseWriter, r *http.Request) {
 		color.Red("\t400 BAD REQUEST\n...........Failed to retrieve the WebsiteList :(...........")
 	} else {
 		fmt.Fprint(w, list)
-
 		color.Green("\t200 OK\n...........Successfully retrieved the WebsiteList :)...........")
 		color.Cyan("The received List is : ")
 
